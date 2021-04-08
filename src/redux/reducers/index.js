@@ -1,8 +1,10 @@
 import {combineReducers} from 'redux';
-import images from './images';
+import photos from './photos';
+import photo from './photo';
 
 let reducers = combineReducers({
-  images,
+  photos,
+  photo,
 });
 
 export default reducers;

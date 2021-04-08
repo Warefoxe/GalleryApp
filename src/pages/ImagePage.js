@@ -1,34 +1,43 @@
-import axios from 'axios';
-import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import ImageItem from '../components/ImageItem';
+import {getImages} from '../redux/reducers/photos';
 
 const ImagePage = ({navigation}) => {
-  const [photos, setPhotos] = useState([]);
+  const dispatch = useDispatch();
+
+  const [images, isLoading] = useSelector(state => [
+    state.photos.images,
+    state.photos.isLoading,
+  ]);
+
   useEffect(() => {
-    axios
-      .get(
-        'https://api.unsplash.com/photos/?client_id=cf49c08b444ff4cb9e4d126b7e9f7513ba1ee58de7906e4360afc1a33d1bf4c0',
-      )
-      .then(({data}) => {
-        setPhotos(data);
-      });
-  }, []);
+    dispatch(getImages());
+  }, [dispatch]);
+
   const showImage = id => {
     navigation.navigate('Detail', {
       imageId: `${id}`,
     });
-    // this.props.navigation.navigate('Image', {
-    //   imageId: `${id}`,
-    // });
   };
 
-  return (
+  const loading = (
+    <View style={styles.loadingView}>
+      <Text style={styles.loadingText}>Loading...</Text>
+    </View>
+  );
+
+  return isLoading ? (
+    loading
+  ) : (
     <View style={styles.container}>
       <ScrollView>
         <View>
-          {photos.map(item => (
+          {images.map(item => (
             <ImageItem
+              description={item.alt_description}
+              author={item.user.name}
               image={item.urls.small}
               id={item.id}
               key={item.id}
@@ -45,29 +54,12 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
   },
-  imgContainer: {
-    position: 'relative',
+  loadingView: {
+    alignItems: 'center',
+    marginTop: 100,
   },
-  img: {
-    width: '100%',
-    height: 200,
-  },
-  item: {
-    fontSize: 18,
-  },
-  descriptionContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'black',
-    opacity: 0.6,
-    padding: 5,
-  },
-  descriptionItem: {
-    flex: 1,
-    color: 'white',
-    marginLeft: 10,
+  loadingText: {
+    fontSize: 25,
   },
 });
 

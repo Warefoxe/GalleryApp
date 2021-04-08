@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 
-const ImageItem = ({image, id, showImage, navigation}) => {
+const ImageItem = ({image, id, author, description, showImage}) => {
   return (
     <TouchableHighlight
       onPress={() => {
@@ -10,7 +10,8 @@ const ImageItem = ({image, id, showImage, navigation}) => {
       <View key={id} style={styles.imgContainer}>
         <Image style={styles.img} source={{uri: image}} />
         <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionItem}>Author: {id}</Text>
+          <Text style={styles.descriptionItem}>Автор: {author}</Text>
+          <Text style={styles.descriptionItem}>Опис: {description}</Text>
         </View>
       </View>
     </TouchableHighlight>
@@ -18,9 +19,6 @@ const ImageItem = ({image, id, showImage, navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-  },
   imgContainer: {
     position: 'relative',
   },
